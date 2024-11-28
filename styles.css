@@ -2,16 +2,18 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  background-color: #4d0ec1;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-image: url("loginbackground.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 /* Container for the login form */
 .login-container {
-  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
