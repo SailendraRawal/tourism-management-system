@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
+
+    public function booking(){
+        return view('user-role.index');
+    }
+
     public function store(Request $request)
     {
          // Validate the request
@@ -20,6 +25,7 @@ class BookingController extends Controller
             'additional_requests' => 'nullable|string|max:1000',
         ]);
 
+        $validated['user_id'] = auth()->user()->id;
 
 
         // Store the booking in the database
@@ -58,6 +64,30 @@ class BookingController extends Controller
 
         $bookings = $query->paginate(10);
         return view('bookings.index', compact('bookings'));
+    }
+
+
+    public function myBooking(Request $request)
+    {
+        $query = Booking::query();
+
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'like', '%' . $request->email . '%');
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $query->where('user_id', auth()->user()->id);
+
+
+        $bookings = $query->paginate(10);
+        return view('bookings.form', compact('bookings'));
     }
 
     public function approve($id)
