@@ -57,7 +57,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:6',
         ]);
 
         // Create the user with the 'user' role
@@ -71,6 +71,6 @@ class AuthController extends Controller
         // Login the user after registration
         auth()->login($user);
 
-        return redirect()->route('booking.form')->with('success', 'Registration successful! Welcome.');
+        return redirect()->route('dynamic.page', ['slug' => 'my-booking'])->with('success', 'Registration successful! Welcome.');
     }
 }

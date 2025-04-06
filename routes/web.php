@@ -37,4 +37,4 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-Route::match(['get', 'post'], '/{slug}', [HomeController::class, 'slug'])->where('slug', '.*');
+Route::match(['get', 'post'], '/{slug}', [HomeController::class, 'slug'])->where('slug', '.*')->name('dynamic.page');

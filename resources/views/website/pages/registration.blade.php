@@ -5,6 +5,7 @@
         <h2 class="text-3xl font-bold text-center text-blue-700 mb-6">Create an Account</h2>
 
         <form action="/register" method="POST" class="space-y-6">
+            @csrf
             <input type="text" name="name" placeholder="Full Name" required
                 class="w-full px-4 py-3 border rounded-lg text-gray-700">
             <input type="email" name="email" placeholder="Email Address" required
