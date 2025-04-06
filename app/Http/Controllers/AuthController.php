@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Package;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,9 +28,10 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             // Check the user's role and redirect accordingly
             if (auth()->user()->role === 'admin') {
-                return redirect()->route('admin.bookings')->with('success', 'Welcome, Admin!');
+                return redirect()->route('admin.dashboard')->with('success', 'Welcome, Admin!');
             } else {
-                return redirect()->route('booking.form')->with('success', 'Welcome back!');
+                $data = Package::all();
+                return view('website.pages.destinations', compact('data'));
             }
         }
 
