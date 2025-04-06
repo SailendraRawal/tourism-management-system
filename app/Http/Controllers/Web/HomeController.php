@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Booking;
 use App\Models\Package;
 use Illuminate\Http\Request;
 
@@ -34,6 +35,10 @@ class HomeController extends Controller
 
                 case 'contact':
 
+                    break;
+
+                case 'my-booking':
+                    $this->viewData['bookings'] = Booking::where('user_id', auth()->user()->id)->paginate(10);
                     break;
                 default:
                     return view('website.pages.' . $slug,  $this->viewData);

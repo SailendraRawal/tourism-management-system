@@ -28,7 +28,7 @@
     <div class="bg-white p-6 rounded-lg shadow-lg w-96">
         <h3 class="text-2xl font-semibold text-gray-800 mb-4" id="packageName"></h3>
 
-        <form  method="POST">
+        <form action="{{ route('package.booking') }}" method="POST">
             @csrf
             <input type="hidden" id="packageId" name="package_id">
 
@@ -41,6 +41,11 @@
             <div class="mb-4">
                 <label for="person_count" class="block text-sm font-medium text-gray-700">Number of People</label>
                 <input type="number" id="person_count" name="person_count" required min="1" class="w-full px-4 py-2 border rounded-lg">
+            </div>
+
+            <div class="mb-4">
+                <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                <input type="number" id="phone" name="phone" required min="1" class="w-full px-4 py-2 border rounded-lg">
             </div>
 
             <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors duration-300">Book Now</button>

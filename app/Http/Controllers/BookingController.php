@@ -3,69 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\Package;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-
-    public function booking(){
+    public function booking()
+    {
         return view('user-role.index');
     }
 
     public function store(Request $request)
     {
-         // Validate the request
+        // Validate the request
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'package' => 'required|string|max:255',
-            'travelers' => 'required|integer|min:1',
-            'travel_date' => 'required|date|after_or_equal:today',
-            'additional_requests' => 'nullable|string|max:1000',
+            'person_count' => 'required|integer|min:1',
+            'booking_date' => 'required|date|after_or_equal:today',
+            'phone' => 'required|string|max:15', // You might want to validate phone too
+            'package_id' => 'required|exists:packages,id',
         ]);
 
-        $validated['user_id'] = auth()->user()->id;
+        // Get the authenticated user
+        $user = auth()->user();
 
+        // Fetch the package by ID
+        $package = Package::findOrFail($request->package_id);
+
+        // Build the booking data
+        $bookingData = [
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $request->phone,
+            'status' => 'pending',
+            'package_id' => $package->id,
+            'package' => $package->name,
+            'travelers' => $validated['person_count'],
+            'travel_date' => $validated['booking_date'],
+        ];
 
         // Store the booking in the database
-        Booking::create($validated);
+        Booking::create($bookingData);
 
         // Redirect or return a response
         return redirect()->back()->with('success', 'Your booking has been successfully submitted!');
     }
-
-    public function search(Request $request)
-    {
-        $request->validate([
-            'search' => 'required',
-        ]);
-
-        $bookings = Booking::where('email', 'like', '%'. $request->search . '%')->get();
-
-        return view('search-results', compact('bookings'));
-    }
-
-    public function index(Request $request)
-    {
-        $query = Booking::query();
-
-        if ($request->filled('name')) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
-
-        if ($request->filled('email')) {
-            $query->where('email', 'like', '%' . $request->email . '%');
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        $bookings = $query->paginate(10);
-        return view('bookings.index', compact('bookings'));
-    }
-
 
     public function myBooking(Request $request)
     {
@@ -84,7 +66,6 @@ class BookingController extends Controller
         }
 
         $query->where('user_id', auth()->user()->id);
-
 
         $bookings = $query->paginate(10);
         return view('bookings.form', compact('bookings'));

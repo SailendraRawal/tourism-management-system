@@ -31,11 +31,9 @@ Route::post('/admin/bookings/{booking}/reject', [BookingController::class, 'reje
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register.form');
 
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/booking', [BookingController::class, 'booking'])->name('booking.form');
-//     Route::get('/my-booking', [BookingController::class, 'myBooking'])->name('myBooking.index');
-
-// });
+Route::middleware(['auth'])->group(function () {
+    Route::post('/package-booking', [BookingController::class, 'store'])->name('package.booking');
+});
 
 
 

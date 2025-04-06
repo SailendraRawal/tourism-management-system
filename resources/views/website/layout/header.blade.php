@@ -24,7 +24,7 @@
         <li><a href="/about" class="hover:text-blue-600 transition duration-300">About Us</a></li>
         <li><a href="/contact" class="hover:text-blue-600 transition duration-300">Contact</a></li>
         @auth
-        <li><a href="/login" class="hover:text-blue-600">My Bookings</a></li>
+        <li><a href="/my-booking" class="hover:text-blue-600">My Bookings</a></li>
         <li><a href="/logout" class="hover:text-blue-600">Logout</a></li>
         @else
         <li><a href="/login" class="hover:text-blue-600">Login</a></li>

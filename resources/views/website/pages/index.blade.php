@@ -10,8 +10,8 @@
                 <p class="text-lg mb-6">Explore destinations, book trips, and make memories.</p>
                 <div class="space-x-4">
                     <a href="/destinations" class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded">Explore Destinations</a>
-                    <a href="/booking"
-                        class="bg-white text-blue-600 hover:text-white hover:bg-blue-600 px-6 py-2 rounded">Book Now</a>
+                    {{-- <a href="/booking"
+                        class="bg-white text-blue-600 hover:text-white hover:bg-blue-600 px-6 py-2 rounded">Book Now</a> --}}
                 </div>
             </div>
         </section>
