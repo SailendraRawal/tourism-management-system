@@ -38,7 +38,7 @@ class HomeController extends Controller
                     break;
 
                 case 'my-booking':
-                    $this->viewData['bookings'] = Booking::where('user_id', auth()->user()->id)->paginate(10);
+                    $this->viewData['bookings'] = Booking::where('user_id', auth()->user()->id)->latest()->paginate(10);
                     break;
                 default:
                     return view('website.pages.' . $slug,  $this->viewData);

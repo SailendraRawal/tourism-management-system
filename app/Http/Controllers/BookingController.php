@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Booking;
 use App\Models\Package;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class BookingController extends Controller
 {
@@ -15,38 +16,40 @@ class BookingController extends Controller
 
     public function store(Request $request)
     {
-        // Validate the request
         $validated = $request->validate([
             'person_count' => 'required|integer|min:1',
             'booking_date' => 'required|date|after_or_equal:today',
-            'phone' => 'required|string|max:15', // You might want to validate phone too
+            'phone' => 'required|string|max:15',
             'package_id' => 'required|exists:packages,id',
         ]);
 
-        // Get the authenticated user
         $user = auth()->user();
+        $package = Package::findOrFail($validated['package_id']);
+        $amount = $package->price * $validated['person_count'];
 
-        // Fetch the package by ID
-        $package = Package::findOrFail($request->package_id);
-
-        // Build the booking data
-        $bookingData = [
+        $booking = Booking::create([
             'user_id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
-            'phone' => $request->phone,
+            'phone' => $validated['phone'],
             'status' => 'pending',
             'package_id' => $package->id,
             'package' => $package->name,
             'travelers' => $validated['person_count'],
             'travel_date' => $validated['booking_date'],
-        ];
+        ]);
 
-        // Store the booking in the database
-        Booking::create($bookingData);
+        $totalAmount = number_format($amount, 2, '.', '');
+        $transaction_uuid = $booking->id . '_' . time();
+        $product_code = env('ESEWA_MERCHANT_CODE', 'EPAYTEST');
+        $secretKey = env('ESEWA_SECRET_KEY', '8gBm/:&EnhH.1/q');
 
-        // Redirect or return a response
-        return redirect()->back()->with('success', 'Your booking has been successfully submitted!');
+        $rawSignature = "total_amount={$totalAmount},transaction_uuid={$transaction_uuid},product_code={$product_code}";
+        $hash = hash_hmac('sha256', $rawSignature, $secretKey, true);
+        $signature = base64_encode($hash);
+
+        // Render a Blade form with hidden fields and auto-submit
+        return view('esewa.redirect', compact('totalAmount', 'transaction_uuid', 'product_code', 'signature', 'booking'));
     }
 
     public function myBooking(Request $request)

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\EsewaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Web\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/package-booking', [BookingController::class, 'store'])->name('package.booking');
 });
 
+Route::get('/esewa/success', [EsewaController::class, 'success'])->name('esewa.success');
+Route::get('/esewa/failure', [EsewaController::class, 'failure'])->name('esewa.failure');
 
 
 Route::match(['get', 'post'], '/{slug}', [HomeController::class, 'slug'])->where('slug', '.*')->name('dynamic.page');

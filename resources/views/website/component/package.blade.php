@@ -40,37 +40,64 @@
 
             <div class="mb-4">
                 <label for="person_count" class="block text-sm font-medium text-gray-700">Number of People</label>
-                <input type="number" id="person_count" name="person_count" required min="1" class="w-full px-4 py-2 border rounded-lg">
+                <input type="number" id="person_count" name="person_count" required min="1" max="10" class="w-full px-4 py-2 border rounded-lg">
             </div>
 
             <div class="mb-4">
                 <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-                <input type="number" id="phone" name="phone" required min="1" class="w-full px-4 py-2 border rounded-lg">
-            </div>
+<input
+    type="tel"
+    id="phone"
+    name="phone"
+    required
+    pattern="[0-9]{7,15}"
+    maxlength="15"
+    class="w-full px-4 py-2 border rounded-lg"
+    placeholder="Enter phone number"
+/>            </div>
 
             <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors duration-300">Book Now</button>
         </form>
+
 
         <button onclick="closeBookingModal()" class="mt-4 w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600 transition-colors duration-300">Close</button>
     </div>
 </div>
 
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
 <script>
-    // Open the modal and populate it with package details
+    function generateSignature() {
+        const now = new Date();
+        const uuid = now.toISOString().slice(2, 10).replace(/-/g, '') + '-' +
+                     now.getHours() + now.getMinutes() + now.getSeconds();
+
+        const total_amount = document.getElementById("total_amount").value;
+        const product_code = document.getElementById("product_code").value;
+        const secret = document.getElementById("secret").value;
+
+        document.getElementById("transaction_uuid").value = uuid;
+
+        const raw = `total_amount=${total_amount},transaction_uuid=${uuid},product_code=${product_code}`;
+        const hash = CryptoJS.HmacSHA256(raw, secret);
+        const hashInBase64 = CryptoJS.enc.Base64.stringify(hash);
+
+        document.getElementById("signature").value = hashInBase64;
+    }
+
+    // Modal open/close functions
     function openBookingModal(packageId) {
-        const packageName = document.getElementById('packageName');
-        const package = @json($data);
+        const packages = @json($data);
+        const selected = packages.find(p => p.id === packageId);
 
-        const selectedPackage = package.find(pkg => pkg.id === packageId);
-
-        if (selectedPackage) {
-            document.getElementById('packageId').value = selectedPackage.id;
-            packageName.textContent = selectedPackage.name;
+        if (selected) {
+            document.getElementById('packageId').value = selected.id;
+            document.getElementById('packageName').textContent = selected.name;
             document.getElementById('bookingModal').classList.remove('hidden');
         }
     }
 
-    // Close the modal
     function closeBookingModal() {
         document.getElementById('bookingModal').classList.add('hidden');
     }

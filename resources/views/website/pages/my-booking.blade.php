@@ -3,6 +3,19 @@
 <main class="container mx-auto px-4 py-8">
     <!-- Search Container -->
 
+    @if (session('success'))
+    <div class="mb-4 rounded-lg bg-green-100 px-4 py-3 text-green-800 shadow-md">
+        <div class="flex items-center justify-between">
+            <p class="text-sm font-medium">{{ session('success') }}</p>
+            <button onclick="this.parentElement.parentElement.remove()" class="text-green-800 hover:text-green-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+                    <path d="M10 8.586l4.95-4.95 1.414 1.414L11.414 10l4.95 4.95-1.414 1.414L10 11.414l-4.95 4.95-1.414-1.414L8.586 10 3.636 5.05l1.414-1.414L10 8.586z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+@endif
+
 
     <!-- Table Container -->
     <div class="bg-white p-6 rounded-lg shadow-md">
