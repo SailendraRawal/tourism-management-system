@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/esewa/success', [EsewaController::class, 'success'])->name('esewa.success');
-Route::get('/esewa/failure', [EsewaController::class, 'failure'])->name('esewa.failure');
+Route::get('/esewa/failure', [EsewaController::class, 'success'])->name('esewa.failure');
 
 
 Route::match(['get', 'post'], '/{slug}', [HomeController::class, 'slug'])->where('slug', '.*')->name('dynamic.page');

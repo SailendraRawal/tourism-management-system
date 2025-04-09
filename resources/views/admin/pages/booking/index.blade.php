@@ -32,6 +32,7 @@
                         <th class="py-3 px-4">Travelers</th>
                         <th class="py-3 px-4">Date</th>
                         <th class="py-3 px-4">Status</th>
+                        <th class="py-3 px-4">Payment Status</th>
                         <th class="py-3 px-4">Action</th>
                     </tr>
                 </thead>
@@ -47,6 +48,12 @@
                                 <span
                                     class="status-label {{ $booking->status }} py-1 px-3 rounded-lg text-sm font-semibold">
                                     {{ ucfirst($booking->status) }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span
+                                    class="status-label {{ $booking->payment_status }} py-1 px-3 rounded-lg text-sm font-semibold">
+                                    {{ ucfirst($booking->payment_status) }}
                                 </span>
                             </td>
                             <td class="py-3 px-4">
